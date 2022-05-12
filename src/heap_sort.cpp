@@ -8,11 +8,14 @@ namespace assignment {
   void HeapSort::Sort(std::vector<int>& arr) const {
 
     // строим двоичную кучу ... BuildMaxHeap ...
-
+    BuildMaxHeap(arr);
     // обходим элементы кучи с конца до корня (не включительно)
-    for (int index = static_cast<int>(arr.size()) - 1; index > 0; index--) {
+    const int size = static_cast<int>(arr.size());
+    for (int index = size - 1; index > 0; index--) {
       // обмениваем местами корень (максимальный элемент) и последний элемент кучи ... std::swap ...
+      std::swap(arr[0], arr[index]);
       // спускаем новый корневой узел вниз ... Heapify ...
+      Heapify(arr, index, 0);
     }
   }
 
@@ -26,6 +29,9 @@ namespace assignment {
     const int size = static_cast<int>(arr.size());
 
     // Напишите здесь свой код ...
+    for (int index = Parent(size - 1); index >= 0; index--) {
+      Heapify(arr, size, index);
+    }
   }
 
   void HeapSort::Heapify(std::vector<int>& arr, int heap_size, int index) {
@@ -39,16 +45,22 @@ namespace assignment {
       const int right_child = RightChild(index);
 
       // поиск наибольшего элемента среди текущего элемента и его потомков ...
-
+      if (arr[right_child] > arr[largest] and right_child < heap_size) {
+        largest = right_child;
+      }
+      if (arr[left_child] > arr[largest] and left_child < heap_size) {
+        largest = left_child;
+      }
       // если текущий элемент больше своих потомков, то он находится на правильном месте (свойство макс. кучи)
       if (largest == index) {
         return;  // завершаем спуск
       }
 
       // обмениваем местами текущий элемент с его потомком ... std::swap ...
-
+      std::swap(arr[index], arr[largest]);
       // продолжаем спуск c нового места (после операции обмена местами)
-      index = -1 /* здесь какая-то ошибка ... */;
+      index = largest; /* здесь какая-то ошибка ... */
+      ;
     }
   }
 
